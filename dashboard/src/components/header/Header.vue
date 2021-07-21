@@ -33,6 +33,8 @@ limitations under the License.
           <inception-button v-if="isAdminPage" class="mr-2" data-cy="inception-button"></inception-button>
 <!--          message center is just mocked up for now and will be implemented in its own ticket -->
 <!--          <message-center />-->
+
+          <apps-nav />
           <settings-button data-cy="settings-button"/>
           <help-button class="" data-cy="help-button"/>
         </div>
@@ -47,10 +49,12 @@ limitations under the License.
   import Breadcrumb from './Breadcrumb';
   import InceptionButton from '../inception/InceptionButton';
   import HelpButton from './HelpButton';
+  import AppsNav from './AppsNav';
 
   export default {
     name: 'Header',
     components: {
+      AppsNav,
       HelpButton,
       InceptionButton,
       Breadcrumb,
