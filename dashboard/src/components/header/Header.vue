@@ -24,6 +24,9 @@ limitations under the License.
               <img ref="skillTreeLogo" src="/static/img/skilltree_logo_v1.png" alt="skilltree logo"/>
             </router-link>
             <span v-if="isAdminPage" ref="adminStamp" class="skills-stamp">ADMIN</span>
+            <span v-if="isQuizAdmin" class="quiz-builder">
+              Quiz Builder
+            </span>
           </div>
         </div>
 
@@ -63,6 +66,9 @@ limitations under the License.
     computed: {
       isAdminPage() {
         return this.$route && this.$route.meta && this.$route.meta.requiresAuth && !this.$route.meta.nonAdmin;
+      },
+      isQuizAdmin() {
+        return this.$route && this.$route.path && this.$route.path.includes('/quiz-admin/');
       },
     },
     beforeDestroy() {
@@ -121,6 +127,28 @@ limitations under the License.
     font-size: 14px;
     width: 85px;
   }
+}
+
+.quiz-builder {
+  /*position: absolute;*/
+  /*bottom: -0.8rem;*/
+  /*left: 6rem;*/
+
+  /*box-shadow: 0 0 0 3px rgba(9, 78, 56, 0.16), 0 0 0 2px rgba(45, 135, 121, 0.24) inset;*/
+  box-shadow: 0 0 0 3px #8b6d6d, 0 0 0 2px #8b6d6d inset;
+  color: #264653;
+  border: 2px solid transparent;
+  border-radius: 4px;
+  display: inline-block;
+  line-height: 40px;
+  font-size: 22px;
+  font-family: 'Black Ops One', cursive;
+  /*text-transform: uppercase;*/
+  text-align: center;
+  opacity: 0.8;
+  margin-left: 0.3rem;
+  /*width: 155px;*/
+  transform: rotate(-17deg);
 }
 
 </style>

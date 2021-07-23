@@ -50,6 +50,8 @@ import SelfReportStatusPage from '@//components/skills/selfReport/SelfReportStat
 import UserAgreement from '@//components/access/UserAgreement';
 import EmailUsers from '@//components/projects/EmailUsers';
 import EmaillProjectAdmins from '@//components/projects/EmailProjectAdmins';
+import quizAdminRoutes from './quizAdminRoutes';
+import quizTakerRoutes from './quizTakerRoutes';
 
 const GlobalBadgePage = () => import(/* webpackChunkName: 'globalBadgePage' */'@/components/badges/global/GlobalBadgePage');
 const GlobalBadgeSkills = () => import(/* webpackChunkName: 'globalBadgeSkills' */'@//components/badges/global/GlobalBadgeSkills');
@@ -81,9 +83,7 @@ const ProjectErrorsPage = () => import(/* webpackChunkName: 'projectErrorsPage' 
 
 Vue.use(Router);
 
-const router = new Router({
-  mode: 'history',
-  routes: [
+const baseRoutes = [
     {
       path: '/administrator',
       component: AdminHomePage,
@@ -545,7 +545,14 @@ const router = new Router({
       },
       meta: { requiresAuth: false },
     },
-  ],
+  ];
+
+let routes = baseRoutes.concat(quizAdminRoutes);
+routes = routes.concat(quizTakerRoutes);
+
+const router = new Router({
+  mode: 'history',
+  routes,
 });
 
 export default router;
