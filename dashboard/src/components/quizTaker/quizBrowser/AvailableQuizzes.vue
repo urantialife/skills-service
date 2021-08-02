@@ -46,9 +46,9 @@
               </div>
             </div>
             <div v-if="!data.item.completed" class="col-auto text-right">
-              <router-link :data-cy="`managesQuizBtn_${data.item.quizId}`"
-                           :to="{ name:'Questions', params: { quizId: data.item.quizId }}"
-                           :aria-label="`Manage Quiz ${data.item.name}`"
+              <router-link :data-cy="`take_quiz-${data.item.quizId}`"
+                           :to="{ name:'StartQuiz', params: { quizId: data.item.quizId }}"
+                           :aria-label="`Take Quiz ${data.item.name}`"
                            class="btn btn-outline-primary btn-sm">
                 <span class="d-none d-sm-inline">Take Quiz </span> <i class="fas fa-arrow-circle-right"
                                                                       aria-hidden="true"/>

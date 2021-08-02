@@ -11,12 +11,14 @@
       <b-container fluid>
         <div style="width: 12rem;">
           <b-row :no-gutters="false">
-            <b-col v-for="app in apps" :key="app.name" cols="6" class="text-center app-link" :class="{ 'app-not-selected': !app.selected }">
-              <router-link :to="app.navTo" :disabled="app.selected">
-                <div @click="closeDropdown()" :class="{ 'app-selected': app.selected }">
+            <b-col v-for="app in apps" :key="app.name" cols="6" class="text-center app-link"
+                   :class="{ 'app-not-selected': !app.selected, 'app-selected': app.selected }">
+              <router-link :to="app.navTo" :event="!app.selected ? 'click' : ''">
+                <div @click="closeDropdown()">
                   <i class="border rounded" :class="app.icon"></i>
                 </div>
-                <div class="app-label" :disabled="app.selected">{{ app.name }}</div>
+                <div class="app-title text-secondary" :disabled="app.selected">{{ app.title }}</div>
+                <div class="app-subTitle text-secondary" :disabled="app.selected">{{ app.subTitle }}</div>
               </router-link>
             </b-col>
           </b-row>
@@ -40,25 +42,33 @@
         myApps.push({
           navTo: { name: 'MyProgressPage' },
           icon: 'fas fa-chart-bar skills-color-progressAndRanking',
-          name: 'Progress',
+          title: 'My',
+          subTitle: 'Progress',
           selected: false,
+          startPath: '/progress-and-rankings',
         });
       }
       myApps.push(...[{
         navTo: { name: 'AdminHomePage' },
         icon: 'fas fa-cogs skills-color-projectAdmin',
-        name: 'Admin',
+        title: 'Project',
+        subTitle: 'Admin',
         selected: false,
+        startPath: '/administrator',
       }, {
         navTo: { name: 'QuizTakerHomePage' },
         icon: 'fas fa-user-graduate text-success',
-        name: 'Take Quiz',
+        title: 'Quiz',
+        subTitle: 'Taker',
         selected: false,
+        startPath: '/quiz-taker',
       }, {
         navTo: { name: 'QuizAdminHome' },
-        icon: 'fas fa-tasks text-warning border rounded',
-        name: 'Create Quiz',
+        icon: 'fas fa-tools text-warning border rounded',
+        title: 'Quiz',
+        subTitle: 'Builder',
         selected: false,
+        startPath: '/quiz-admin',
       }]);
       this.apps = myApps;
       this.updateSelected(this.$route);
@@ -73,7 +83,7 @@
       updateSelected(currentRouterItem) {
         this.apps = this.apps.map((item) => {
           const copy = { ...item };
-          copy.selected = currentRouterItem.path && currentRouterItem.name === item.navTo.name;
+          copy.selected = currentRouterItem.path && currentRouterItem.path.startsWith(item.startPath);
           return copy;
         });
       },
@@ -93,10 +103,16 @@
     margin-top: 1rem !important;
   }
 
-  .app-link .app-label {
+  .app-link .app-title {
     margin-top: 0.2rem;
     font-size: 0.8rem;
     font-weight: bold;
+  }
+
+  .app-link .app-subTitle {
+    font-size: 0.8rem;
+    font-weight: bold;
+    line-height: 0.7rem;
   }
 
   .app-link i {
@@ -108,8 +124,14 @@
     padding: 0rem 0.5rem 1.5rem 0.5rem;
   }
 
+  .app-selected:hover, .app-selected a:hover {
+    cursor: not-allowed !important;
+    text-decoration: none !important;
+  }
+
   .app-selected i {
     background-color: map_get($theme-colors, primary) !important;
+    color: white !important;
   }
 
   .app-not-selected:hover i {
@@ -117,7 +139,7 @@
     border-color: map_get($theme-colors, primary) !important;
   }
 
-  .app-not-selected:hover .app-label {
+  .app-not-selected:hover .app-title, .app-not-selected:hover .app-subTitle {
     color: map_get($theme-colors, primary) !important;
   }
 

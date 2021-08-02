@@ -33,9 +33,9 @@
             </my-quiz-info-card>
           </b-col>
           <b-col>
-            <my-quiz-info-card sub-title="Questions" icon="far fa-question-circle skills-color-badges">
+            <my-quiz-info-card sub-title="Correct Questions" icon="far fa-question-circle skills-color-badges">
               <template v-slot:title>
-                {{  quizRun.numQuestions | number }}
+                <span class="text-success font-weight-bold">{{ quizRun.numQuestionsAnsweredRight | number }}</span> / {{  quizRun.numQuestions | number }}
               </template>
             </my-quiz-info-card>
           </b-col>

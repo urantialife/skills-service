@@ -16,17 +16,22 @@ limitations under the License.
 <template>
 
   <div class="bg-white header">
-    <div class="container-fluid py-3">
+    <div class="container-fluid py-2">
       <div class="row">
         <div class="col-sm">
           <div class="text-center text-sm-left">
             <router-link data-cy="skillTreeLogo" class="h2 text-primary ml-2" to="/">
-              <img ref="skillTreeLogo" src="/static/img/skilltree_logo_v1.png" alt="skilltree logo"/>
+              <img ref="skillTreeLogo"
+                   src="/static/img/skilltree_logo_v2.png" alt="skilltree logo"/>
+              <img v-if="isQuizAdmin" class="ml-2"
+                   ref="quizBuilderLogo" src="/static/img/quizbuilder-logo_v1.png" alt="Quiz Builder"/>
+              <img v-if="isQuizTaker" class="ml-2"
+                   ref="quizTakerLogo" src="/static/img/quiztaker-logo_v1.png" alt="Quiz Taker"/>
             </router-link>
             <span v-if="isAdminPage" ref="adminStamp" class="skills-stamp">ADMIN</span>
-            <span v-if="isQuizAdmin" class="quiz-builder">
-              Quiz Builder
-            </span>
+<!--            <span v-if="isQuizAdmin" class="quiz-builder">-->
+<!--              Quiz Builder-->
+<!--            </span>-->
           </div>
         </div>
 
@@ -65,10 +70,13 @@ limitations under the License.
     },
     computed: {
       isAdminPage() {
-        return this.$route && this.$route.meta && this.$route.meta.requiresAuth && !this.$route.meta.nonAdmin;
+        return this.$route && this.$route.path && this.$route.path.startsWith('/administrator/');
       },
       isQuizAdmin() {
-        return this.$route && this.$route.path && this.$route.path.includes('/quiz-admin/');
+        return this.$route && this.$route.path && this.$route.path.startsWith('/quiz-builder/');
+      },
+      isQuizTaker() {
+        return this.$route && this.$route.path && this.$route.path.startsWith('/quiz-taker/');
       },
     },
     beforeDestroy() {
@@ -145,10 +153,10 @@ limitations under the License.
   font-family: 'Black Ops One', cursive;
   /*text-transform: uppercase;*/
   text-align: center;
-  opacity: 0.8;
+  /*opacity: 0.8;*/
   margin-left: 0.3rem;
   /*width: 155px;*/
-  transform: rotate(-17deg);
+  /*transform: rotate(-17deg);*/
 }
 
 </style>

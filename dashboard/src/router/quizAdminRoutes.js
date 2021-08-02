@@ -6,7 +6,7 @@ import QuizMetrics from '../components/quizAdmin/questions/metrics/QuizMetrics';
 
 export default [
   {
-    path: '/quiz-admin',
+    path: '/quiz-builder',
     component: QuizAdminApp,
     meta: {
       requiresAuth: true,
