@@ -51,12 +51,12 @@ class UserAttrsService {
 
     @Transactional
     @Profile
-    UserAttrs saveUserAttrs(String userId, UserInfo userInfo) {
+    UserAttrs saveUserAttrs(String userId, UserInfo userInfo, boolean forceUserTags=true) {
         validateUserId(userId)
 
         UserAttrs userAttrs = loadUserAttrsFromLocalDb(userId)
-        boolean updateUserAttrs = false
-        boolean updateUserTags = false
+        boolean updateUserAttrs
+        boolean updateUserTags
 
         if (!userAttrs) {
             // no userAttrs existed, creating for the first time
@@ -65,7 +65,7 @@ class UserAttrsService {
             updateUserTags = true
         } else {
             updateUserAttrs = shouldUpdateUserAttrs(userInfo, userAttrs)
-            updateUserTags = shouldUpdateUserTags(userAttrs)
+            updateUserTags = forceUserTags || shouldUpdateUserTags(userAttrs)
 
             if (log.isTraceEnabled()) {
                 log.trace('UserInfo/UserAttrs: \n\tfirstName [{}/{}]\n\tlastName [{}]/[{}]\n\temail [{}]/[{}]\n\tuserDn [{}]/[{}]\n\tnickname [{}]/[{}]\n\tusernameForDisplay [{}]/[{}]\n\tlandingPage [{}]/[{}]',

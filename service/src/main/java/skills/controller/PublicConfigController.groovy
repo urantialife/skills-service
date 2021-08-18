@@ -22,6 +22,7 @@ import org.springframework.security.oauth2.client.registration.ClientRegistratio
 import org.springframework.web.bind.annotation.*
 import skills.HealthChecker
 import skills.UIConfigProperties
+import skills.UserTagsUpdater
 import skills.auth.AuthMode
 import skills.controller.result.model.SettingsResult
 import skills.profile.EnableCallStackProf
@@ -62,6 +63,9 @@ class PublicConfigController {
 
     @Autowired
     private ClientRegistrationRepository clientRegistrationRepository;
+
+    @Autowired
+    UserTagsUpdater userTagsUpdater
 
     @RequestMapping(value = "/config", method = RequestMethod.GET, produces = "application/json")
     @ResponseBody
@@ -121,5 +125,11 @@ class PublicConfigController {
         healthChecker.checkRequiredServices(false)
         Map<String,String> res = new HashMap<>(statusRes)
         return res
+    }
+
+    @RequestMapping(value = "/updateUserTags", method = RequestMethod.GET, produces = "application/json")
+    Boolean updateUserTags() {
+        userTagsUpdater.populateExistingUsers()
+        return true
     }
 }
