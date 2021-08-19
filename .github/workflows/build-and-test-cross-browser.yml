@@ -106,8 +106,6 @@ jobs:
         java-version: '11.X.X' # The JDK version to make available on the path.
 
     - uses: browser-actions/setup-chrome@stable
-      with:
-        chrome-version: stable
 
     - name: Print Versions
       run: |
