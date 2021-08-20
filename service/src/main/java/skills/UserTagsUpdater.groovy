@@ -36,12 +36,13 @@ class UserTagsUpdater {
         List<UserAttrs> userAttrs = userAttrsRepo.findAll()
         log.info("Found [${userAttrs.size()}] userAttrs")
         userAttrs.eachWithIndex { userAttr, idx ->
-            println "Found user [${userAttr.dn}]"
             try {
-                log.info("Updating user [${userAttr.dn}]")
+                if (idx % 100 == 0) {
+                    log.info("Updated user [${idx}] users...")
+                }
                 userDetailsService.loadUserByUsername(userAttr.dn)
             } catch (Exception e) {
-                log.error("Failed to updated user [${userAttr.dn}]", e)
+                log.error("Failed to update user [${userAttr.dn}]", e)
             }
         }
     }
