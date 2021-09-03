@@ -33,17 +33,31 @@ class UserTagsUpdater {
     UserAttrsRepo userAttrsRepo
 
     void populateExistingUsers() {
+
         List<UserAttrs> userAttrs = userAttrsRepo.findAll()
-        log.info("Found [${userAttrs.size()}] userAttrs")
+        int totalUsers = userAttrs.size()
+        int notFoundInCasport = 0
+        int otherErrors = 0
+        log.info("Found [${totalUsers}] userAttrs")
         userAttrs.eachWithIndex { userAttr, idx ->
             try {
                 if (idx % 100 == 0) {
-                    log.info("Updated user [${idx}] users...")
+                    showStats(idx, notFoundInCasport, otherErrors)
                 }
                 userDetailsService.loadUserByUsername(userAttr.dn)
             } catch (Exception e) {
-                log.error("Failed to update user [${userAttr.dn}]", e)
+//                log.error("Failed to update user [${userAttr.dn}]", e)
+                if (e.message && e.message.containsIgnoreCase("not found in Casport")) {
+                    notFoundInCasport++
+                } else {
+                    otherErrors++
+                }
             }
         }
+        showStats(totalUsers, notFoundInCasport, otherErrors)
+    }
+
+    void showStats(int currentIdx, int notFoundInCasport, int otherErrors) {
+        log.info("Updated user [${currentIdx}] users. users not found in CASPORT: [${notFoundInCasport}], other errors: [${otherErrors}].")
     }
 }
