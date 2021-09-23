@@ -39,4 +39,13 @@ interface UserAttrsRepo extends CrudRepository<UserAttrs, Integer> {
     @Query(value='''select attrs.email from user_attrs attrs where attrs.user_id = ?1''', nativeQuery = true)
     String findEmailByUserId(String userId)
 
+
+    @Nullable
+    List<UserAttrs> findByUserIdGreaterThanOrderByUserId(String userId)
+
+
+    @Query('''select attrs 
+        from UserAttrs attrs 
+        where attrs.userId not in (select ut.userId from UserTag ut)''')
+    List<UserAttrs> findAllWhereNotInUserTags()
 }

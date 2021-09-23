@@ -128,8 +128,8 @@ class PublicConfigController {
     }
 
     @RequestMapping(value = "/updateUserTags", method = RequestMethod.GET, produces = "application/json")
-    Boolean updateUserTags() {
-        userTagsUpdater.populateExistingUsers()
+    Boolean updateUserTags(@RequestParam(required = false) String userId, @RequestParam(required = false, defaultValue = "true") boolean userIdNotInUserTags) {
+        userTagsUpdater.populateExistingUsers(userId, userIdNotInUserTags)
         return true
     }
 }

@@ -32,9 +32,19 @@ class UserTagsUpdater {
     @Autowired
     UserAttrsRepo userAttrsRepo
 
-    void populateExistingUsers() {
+    void populateExistingUsers(String userId, boolean userIdNotInUserTags=true) {
 
-        List<UserAttrs> userAttrs = userAttrsRepo.findAll()
+        List<UserAttrs> userAttrs
+        if (userId) {
+            userAttrs = userAttrsRepo.findByUserIdGreaterThanOrderByUserId(userId)
+        } else {
+            if (userIdNotInUserTags) {
+                userAttrs = userAttrsRepo.findAllWhereNotInUserTags()
+            } else {
+                userAttrs = userAttrsRepo.findAll()
+            }
+        }
+
         int totalUsers = userAttrs.size()
         int notFoundInCasport = 0
         int otherErrors = 0
