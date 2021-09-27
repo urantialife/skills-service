@@ -400,7 +400,7 @@ describe('Client Display Tests', () => {
         cy.contains("Global Badge Details")
     });
 
-    it('view global badge with skills from two projects assigned', () => {
+    it.only('view global badge with skills from two projects assigned', () => {
       cy.resetDb();
       cy.fixture('vars.json').then((vars) => {
         if (!Cypress.env('oauthMode')) {
@@ -442,6 +442,7 @@ describe('Client Display Tests', () => {
       cy.get('[data-cy=gb_proj1]').contains('blah1').should('not.exist');
       cy.get('[data-cy=gb_proj2]').contains('blah1').should('exist');
       cy.get('[data-cy=gb_proj1]').contains('Search blah skill 1');
+      cy.contains(' Cross-project Skill').should('not.exist');
     });
 
     it('global badge with project levels should not display no skill assigned message', () => {

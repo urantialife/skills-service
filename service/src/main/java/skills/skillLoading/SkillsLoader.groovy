@@ -685,13 +685,14 @@ class SkillsLoader {
     private SkillGlobalBadgeSummary loadGlobalBadgeSummary(String userId, String originatingProject, SkillDefWithExtra badgeDefinition, Integer version = Integer.MAX_VALUE, boolean loadSkills = false) {
         List<SkillSummary> skillsRes = []
 
+        boolean global = badgeDefinition.projectId == null;
         if (loadSkills) {
             SubjectDataLoader.SkillsData groupChildrenMeta = subjectDataLoader.loadData(userId, null, badgeDefinition.skillId, version, SkillRelDef.RelationshipType.BadgeRequirement)
             skillsRes = createSkillSummaries(null, groupChildrenMeta.childrenWithPoints)?.sort({ it.skill?.toLowerCase() })
             if (skillsRes) {
                 // all the skills are "cross-project" if they don't belong to the project that originated this reqest
                 skillsRes.each {
-                    if (it.projectId != originatingProject) {
+                    if (it.projectId != originatingProject && !global) {
                         it.crossProject = true
                     }
                 }
@@ -805,10 +806,14 @@ class SkillsLoader {
             }
 
             skillsRes << new SkillSummary(
-                    projectId: skillDef.projectId, projectName: projDef.name,
-                    skillId: skillDef.skillId, skill: skillDef.name,
-                    points: points, todaysPoints: todayPoints,
-                    pointIncrement: skillDef.pointIncrement, pointIncrementInterval: skillDef.pointIncrementInterval,
+                    projectId: skillDef.projectId,
+                    projectName: projDef.name,
+                    skillId: skillDef.skillId,
+                    skill: skillDef.name,
+                    points: points,
+                    todaysPoints: todayPoints,
+                    pointIncrement: skillDef.pointIncrement,
+                    pointIncrementInterval: skillDef.pointIncrementInterval,
                     maxOccurrencesWithinIncrementInterval: skillDef.numMaxOccurrencesIncrementInterval,
                     totalPoints: skillDef.totalPoints,
                     dependencyInfo: skillDefAndUserPoints.dependencyInfo,
