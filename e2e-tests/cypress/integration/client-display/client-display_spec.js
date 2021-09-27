@@ -400,7 +400,7 @@ describe('Client Display Tests', () => {
         cy.contains("Global Badge Details")
     });
 
-    it.only('view global badge with skills from two projects assigned', () => {
+    it('view global badge with skills from two projects assigned', () => {
       cy.resetDb();
       cy.fixture('vars.json').then((vars) => {
         if (!Cypress.env('oauthMode')) {
