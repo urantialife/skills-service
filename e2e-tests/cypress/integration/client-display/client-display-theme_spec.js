@@ -19,17 +19,12 @@ const dateFormatter = value => moment.utc(value).format('YYYY-MM-DD[T]HH:mm:ss[Z
 describe('Client Display Tests', () => {
 
     const snapshotOptions = {
-        blackout: ['[data-cy=pointHistoryChart]', '[data-cy=achievementDate]'],
-        failureThreshold: 0.03, // threshold for entire image
-        failureThresholdType: 'percent', // percent of image or number of pixels
-        customDiffConfig: { threshold: 0.01 }, // threshold for each pixel
-        capture: 'fullPage', // When fullPage, the application under test is captured in its entirety from top to bottom.
+        blackout: ['[data-cy=pointHistoryChart]', '[data-cy=achievementDate]', '[data-cy="userFirstSeen"]'],
     };
     const sizes = [
         'iphone-6',
         'ipad-2',
         'default',
-        // [1200, 1080],
     ];
 
     const renderWait = 4000;
@@ -252,6 +247,9 @@ describe('Client Display Tests', () => {
             cy.contains('View Details').click()
             cy.contains('Badge 1');
             cy.contains('This is 3');
+            cy.get('[data-cy="skillProgress_index-0"] [data-cy="skillProgress-ptsOverProgressBard"]').contains('200 / 500')
+            cy.get('[data-cy="skillProgress_index-1"] [data-cy="skillProgress-ptsOverProgressBard"]').contains('0 / 500')
+            cy.get('[data-cy="skillProgress_index-2"] [data-cy="skillProgress-ptsOverProgressBard"]').contains('200 / 200')
             cy.matchSnapshotImage(snapshotOptions);
         });
 
@@ -307,6 +305,10 @@ describe('Client Display Tests', () => {
             cy.contains('Skill Overview')
             cy.contains('This is 1');
             cy.contains('Lorem ipsum dolor sit amet');
+
+            cy.get('[data-cy="overallPointsEarnedCard"] [data-cy="progressInfoCardTitle"]').contains('200')
+            cy.get('[data-cy="pointsPerOccurrenceCard"] [data-cy="progressInfoCardTitle"]').contains('100')
+            cy.get('[data-cy="skillProgress-ptsOverProgressBard"]').contains('200 / 500 Points')
             cy.matchSnapshotImage(snapshotOptions);
         });
 
