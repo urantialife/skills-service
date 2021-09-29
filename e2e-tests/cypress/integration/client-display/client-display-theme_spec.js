@@ -19,7 +19,7 @@ const dateFormatter = value => moment.utc(value).format('YYYY-MM-DD[T]HH:mm:ss[Z
 describe('Client Display Tests', () => {
 
     const snapshotOptions = {
-        blackout: ['[data-cy=pointHistoryChart]', '[data-cy=achievementDate]', '[data-cy="userFirstSeen"]'],
+        blackout: ['[data-cy="pointHistoryChart"]', '[data-cy="achievementDate"]', '[data-cy="userFirstSeen"]'],
     };
     const sizes = [
         'iphone-6',
@@ -183,44 +183,49 @@ describe('Client Display Tests', () => {
             cy.matchSnapshotImage(snapshotOptions);
         });
 
-        it(`test theming - project rank - ${size}`, () => {
-            cy.setResolution(size);
+        // screenshot blackout feature on a smaller screen if shifted and does not cover the date
+        if (size !== 'iphone-6') {
+            it(`test theming - project rank - ${size}`, () => {
+                cy.setResolution(size);
 
-            cy.cdInitProjWithSkills();
+                cy.cdInitProjWithSkills();
 
-            const m = moment.utc('2020-09-12 11', 'YYYY-MM-DD HH');
-            for (let i = 0; i < 5; i += 1) {
-                cy.request('POST', `/api/projects/proj1/skills/skill1`, {
-                    userId: `uniqueUser${i}`,
-                    timestamp: m.clone()
-                        .add(1, 'day')
-                        .format('x')
-                });
-                cy.request('POST', `/api/projects/proj1/skills/skill1`, {
-                    userId: `uniqueUser${i}`,
-                    timestamp: m.clone()
-                        .add(2, 'day')
-                        .format('x')
-                });
-            }
+                const m = moment.utc('2020-09-12 11', 'YYYY-MM-DD HH');
+                for (let i = 0; i < 5; i += 1) {
+                    cy.request('POST', `/api/projects/proj1/skills/skill1`, {
+                        userId: `uniqueUser${i}`,
+                        timestamp: m.clone()
+                            .add(1, 'day')
+                            .format('x')
+                    });
+                    cy.request('POST', `/api/projects/proj1/skills/skill1`, {
+                        userId: `uniqueUser${i}`,
+                        timestamp: m.clone()
+                            .add(2, 'day')
+                            .format('x')
+                    });
+                }
 
-            cy.cdVisit('/?enableTheme=true&internalBackButton=true')
+                cy.cdVisit('/?enableTheme=true&internalBackButton=true')
 
-            // back button - border color
-            cy.cdClickRank();
-            // THEME: "pageTitleTextColor": "#fdfbfb",
-            cy.get('[data-cy=back]').should('have.css', 'border-color')
-                .and('equal', 'rgb(253, 251, 251)');
-            cy.get('[data-cy=back]').should('have.css', 'color')
-                .and('equal', 'rgb(253, 251, 251)');
+                // back button - border color
+                cy.cdClickRank();
+                // THEME: "pageTitleTextColor": "#fdfbfb",
+                cy.get('[data-cy=back]')
+                    .should('have.css', 'border-color')
+                    .and('equal', 'rgb(253, 251, 251)');
+                cy.get('[data-cy=back]')
+                    .should('have.css', 'color')
+                    .and('equal', 'rgb(253, 251, 251)');
 
-
-            cy.contains('You are Level 2!');
-            // wait for the bar (on the bar chart) to render
-            cy.get('[data-cy="levelBreakdownChart-animationEnded"]');
-            cy.matchSnapshotImage(snapshotOptions);
-        });
-
+                cy.contains('You are Level 2!');
+                cy.get('[id="points_user0"]')
+                    .contains('400 Points')
+                // wait for the bar (on the bar chart) to render
+                cy.get('[data-cy="levelBreakdownChart-animationEnded"]');
+                cy.matchSnapshotImage(snapshotOptions);
+            });
+        }
         it(`test theming - badge - ${size}`, () => {
             cy.setResolution(size);
 
@@ -230,6 +235,7 @@ describe('Client Display Tests', () => {
 
             cy.cdClickBadges();
             cy.contains('Badge 3')
+            cy.get('[placeholder="Search Available Badges"]').should('be.visible')
             cy.matchSnapshotImage(snapshotOptions);
 
         });
@@ -287,6 +293,20 @@ describe('Client Display Tests', () => {
             cy.contains('Skill has 1 direct dependent(s).');
             cy.contains('Earn up to 1,400 points');
             cy.contains('Description');
+
+            cy.get('[data-cy="skillProgress_index-0"] [data-cy="overallPointsEarnedCard"] [data-cy="progressInfoCardTitle"]').contains('200')
+            cy.get('[data-cy="skillProgress_index-0"] [data-cy="pointsPerOccurrenceCard"] [data-cy="progressInfoCardTitle"]').contains('100')
+            cy.get('[data-cy="skillProgress_index-0"] [data-cy="skillProgress-ptsOverProgressBard"]').contains('200 / 500 Points')
+
+            cy.get('[data-cy="skillProgress_index-1"] [data-cy="overallPointsEarnedCard"] [data-cy="progressInfoCardTitle"]').contains('0')
+            cy.get('[data-cy="skillProgress_index-1"] [data-cy="pointsPerOccurrenceCard"] [data-cy="progressInfoCardTitle"]').contains('100')
+            cy.get('[data-cy="skillProgress_index-1"] [data-cy="skillProgress-ptsOverProgressBard"]').contains('0 / 500 Points')
+
+            cy.get('[data-cy="skillProgress_index-2"] [data-cy="overallPointsEarnedCard"] [data-cy="progressInfoCardTitle"]').contains('200')
+            cy.get('[data-cy="skillProgress_index-2"] [data-cy="pointsPerOccurrenceCard"] [data-cy="progressInfoCardTitle"]').contains('100')
+            cy.get('[data-cy="skillProgress_index-2"] [data-cy="skillProgress-ptsOverProgressBard"]').contains('200 / 200 Points')
+
+            cy.get('[data-cy="skillProgress_index-3"] [data-cy="skillProgress-ptsOverProgressBard"]').contains('0 / 200 Points')
 
             cy.matchSnapshotImage(snapshotOptions);
         });
@@ -787,9 +807,8 @@ describe('Client Display Tests', () => {
     cy.get('.skills-badge').eq(0).contains('Badge 2')
     cy.get('.skills-badge').eq(1).contains('0% Complete')
     cy.get('.skills-badge').eq(1).contains('Badge 3');
+    cy.wait(3000); // wait for highlighting
     cy.matchSnapshotImage(snapshotOptions);
   });
 
-//   http://localhost:8083/?themeParam=buttons|{%22backgroundColor%22:%22green%22,%22foregroundColor%22:%22white%22,%20%22borderColor%22:%22purple%22}&themeParam=textPrimaryColor|blue&themeParam=textSecondaryColor|purple&themeParam=tiles|{%22backgroundColor%22:%20%22yellow%22}&themeParam=badges|{%22backgroundColor%22:%22blue%22}
-//     http://localhost:8083/?themeParam=charts|{%22lineColor%22:%22purple%22,%22labelBorderColor%22:%22green%22,%22labelBackgroundColor%22:%22neon%22,%22labelForegroundColor%22:%22gray%22,%22gradientStartColor%22:%22blue%22,%22gradientStopColor%22:%22yellow%22}
 });
