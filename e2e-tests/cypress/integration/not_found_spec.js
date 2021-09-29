@@ -47,6 +47,9 @@ describe('Resource Not Found Tests', () => {
     });
 
     it('invalid skill results in not found page', () => {
+      Cypress.on('uncaught:exception', (err, runnable) => {
+        return false
+      })
       cy.intercept('GET', '/api/myProgressSummary').as('loadProgress');
       cy.visit('/administrator/projects/proj1/subjects/subj1/skills/skillFooo');
 
@@ -64,7 +67,7 @@ describe('Resource Not Found Tests', () => {
       cy.visit('/projects');
       cy.get('[data-cy=oldLinkRedirect]').should('be.visible');
       cy.get('[data-cy=newLink]').should('be.visible');
-      cy.wait(11*1000); //wait for redirect timeout
+      cy.wait(12*1000); //wait for redirect timeout
       cy.wait('@loadProjects');
       cy.get('[data-cy=breadcrumb-Projects]').should('be.visible');
 

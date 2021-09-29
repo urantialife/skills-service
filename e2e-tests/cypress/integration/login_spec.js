@@ -18,7 +18,7 @@ describe('Login Tests', () => {
   beforeEach(() => {
     cy.logout();
 
-    cy.intercept('GET', '/app/projects').as('getProjects')
+    cy.intercept('GET', '/app/projects*').as('getProjects')
       .intercept('GET', '/api/icons/customIconCss').as('getProjectsCustomIcons')
       .intercept('GET', '/app/userInfo').as('getUserInfo')
       .intercept('GET', '/app/oAuthProviders').as('getOAuthProviders')
@@ -69,10 +69,6 @@ describe('Login Tests', () => {
     cy.get('#inputPassword').type('password');
     cy.contains('Login').click();
 
-    cy.wait('@getProjects')
-      .then(({ request, response}) => {
-        expect(response.statusCode).to.eq(200)
-      })
     cy.wait('@getUserInfo')
       .then(({ request, response}) => {
         expect(response.statusCode).to.eq(200)

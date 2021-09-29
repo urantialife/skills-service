@@ -13,18 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import moment from 'moment-timezone';
-const dateFormatter = value => moment.utc(value).format('YYYY-MM-DD[T]HH:mm:ss[Z]');
-
 describe('Client Display Theme Components Tests', () => {
-
-    const snapshotOptions = {
-        blackout: ['[data-cy=achievementDate]'],
-        failureThreshold: 0.03, // threshold for entire image
-        failureThresholdType: 'percent', // percent of image or number of pixels
-        customDiffConfig: { threshold: 0.01 }, // threshold for each pixel
-        capture: 'fullPage', // When fullPage, the application under test is captured in its entirety from top to bottom.
-    };
 
     beforeEach(() => {
         cy.createProject(1);
@@ -115,12 +104,13 @@ describe('Client Display Theme Components Tests', () => {
         cy.cdVisit(url);
         cy.cdClickSubj(0);``
         cy.get('[data-cy="filterMenu"] .dropdown').click();
-        cy.matchSnapshotImageForElement('[data-cy="filterMenu"] .dropdown-menu.show', 'filterMenu-skills', snapshotOptions);
+        cy.matchSnapshotImageForElement('[data-cy="filterMenu"] [data-cy="filter_withoutProgress"]', 'filterMenu-skills-noProgress');
+        cy.matchSnapshotImageForElement('[data-cy="filterMenu"] [data-cy="filter_withPointsToday"]', 'filterMenu-skills-withPointsToday');
 
         cy.cdBack()
         cy.cdClickBadges();
         cy.get('[data-cy="filterMenu"] .dropdown').click();
-        cy.matchSnapshotImageForElement('[data-cy="filterMenu"] .dropdown-menu.show', 'filterMenu-badges', snapshotOptions);
+        cy.matchSnapshotImageForElement('[data-cy="filterMenu"] .dropdown-menu.show', 'filterMenu-badges');
     })
 
 

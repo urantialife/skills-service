@@ -288,7 +288,13 @@ describe('Subjects Tests', () => {
         cy.get('.alert-danger').contains('File is not an image format');
     });
 
-    it('upload custom icon - server side error', () => {
+    it.only('upload custom icon - server side error', () => {
+        Cypress.on('uncaught:exception', (err, runnable) => {
+            if (err.message.includes('Something bad')) {
+                return false
+            }
+        })
+
         cy.request('POST', '/admin/projects/proj1/subjects/subj1', {
             projectId: 'proj1',
             subjectId: 'subj1',
@@ -310,6 +316,7 @@ describe('Subjects Tests', () => {
 
         const filename = 'valid_icon.png';
         cy.get('input[type=file]').attachFile(filename);
+        cy.wait('@addAdmin');
 
         cy.get('.toast-body').contains('Encountered error when uploading');
     });

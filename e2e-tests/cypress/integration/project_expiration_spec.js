@@ -66,6 +66,7 @@ describe('Project Expiration Tests', () => {
   });
 
   it('Project Expiration Project Display', () => {
+    cy.createProject(1);
     const markedExpired = dayjs().utc().subtract(5, 'days').format('YYYY-MM-DD[T]HH:mm:ss[Z]')
     const  results = [{
       'projectId': 'proj1',
@@ -84,8 +85,7 @@ describe('Project Expiration Tests', () => {
       'levelsArePoints': false,
       'expiring': true,
       'expirationTriggered': markedExpired,
-    },[],
-      {
+    }, {
         'projectId': 'proj1',
         'name': 'Proj 1',
         'created': '2020-01-01T12:01:01.001+00:00',
@@ -102,7 +102,7 @@ describe('Project Expiration Tests', () => {
         'levelsArePoints': false,
         'expiring': false,
         'expirationTriggered': '',
-      },[]];
+      }];
     cy.intercept('GET', '/admin/projects/proj1', (req) => {
       req.reply(results.shift());
     }).as('getProject');

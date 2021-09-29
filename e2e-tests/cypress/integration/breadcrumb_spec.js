@@ -67,7 +67,7 @@ describe('Breadcrumb Navigation Tests', () => {
         const now = dayjs();
         cy.intercept({method: 'GET', url: '/admin/projects/proj1/subjects/subj1/skills'}).as('loadSkills');
         cy.intercept({method: 'GET', url: '/admin/projects/proj1/subjects/subj1/skills/skill1'}).as('loadSkill');
-        cy.intercept('GET', '/admin/projects/proj1/skills/skill1/users').as('loadSkillUsers');
+        cy.intercept('GET', '/admin/projects/proj1/skills/skill1/users*').as('loadSkillUsers');
         cy.intercept('GET', '/admin/projects/proj1/skills/skill1/dependency/graph').as('loadSkillGraph');
         cy.request('POST', `/api/projects/proj1/skills/skill1`, {userId: `user0@skills.org`, timestamp: now.format('x')})
 
@@ -264,7 +264,7 @@ describe('Breadcrumb Navigation Tests', () => {
     })
 
     it('Metrics', () => {
-        cy.intercept('GET', '/admin/projects/proj1/metrics/distinctUsersOverTimeForProject').as('loadMetrics');
+        cy.intercept('GET', '/admin/projects/proj1/metrics/distinctUsersOverTimeForProject*').as('loadMetrics');
         cy.visit('/administrator/projects/proj1/metrics');
         cy.wait('@loadMetrics');
         cy.get('[data-cy=breadcrumb-proj1]').click();
@@ -275,7 +275,7 @@ describe('Breadcrumb Navigation Tests', () => {
     })
 
     it('Issues', () => {
-        cy.intercept('GET', '/admin/projects/proj1/errors').as('loadErrors');
+        cy.intercept('GET', '/admin/projects/proj1/errors*').as('loadErrors');
         cy.visit('/administrator/projects/proj1/issues');
         cy.wait('@loadErrors');
         cy.get('[data-cy=breadcrumb-proj1]').click();

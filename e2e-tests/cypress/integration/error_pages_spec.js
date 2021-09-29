@@ -16,6 +16,9 @@
 describe('Error Pages Tests', () => {
 
     it('Project Does Not Exist', () => {
+        Cypress.on('uncaught:exception', (err, runnable) => {
+            return false
+        })
         cy.intercept({
             method: 'GET',
             url: '/admin/projects/fake'
@@ -56,6 +59,10 @@ describe('Error Pages Tests', () => {
     });
 
     it( 'User Not Authorized For Project', () => {
+        Cypress.on('uncaught:exception', (err, runnable) => {
+            return false
+        })
+
         cy.register('user1', 'password1', false);
         cy.register('user2', 'password2', false);
         cy.logout();

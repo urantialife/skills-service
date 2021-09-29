@@ -307,7 +307,7 @@ describe('Accessibility Tests', () => {
     cy.customA11y();
 
     // --- Issues page ---
-    cy.intercept('GET', '/admin/projects/MyNewtestProject/errors').as('getErrors');
+    cy.intercept('GET', '/admin/projects/MyNewtestProject/errors*').as('getErrors');
     cy.get('[data-cy=nav-Issues]').click();
     cy.wait('@getErrors');
     cy.contains('Remove All');

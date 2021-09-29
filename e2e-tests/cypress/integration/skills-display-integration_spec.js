@@ -25,6 +25,9 @@ const testTime = new Date().getTime()
 const yesterday = new Date().getTime() - (1000 * 60 * 60 * 24)
 
 describe('Navigation Tests', () => {
+  const snapshotOptions = {
+    blackout: ['[data-cy="pointHistoryChart"]', '[data-cy="achievementDate"]', '[data-cy="userFirstSeen"]', '[data-cy="selfReportRejectedAlert"]'],
+  };
 
   beforeEach(() => {
     cy.createProject(1);
@@ -52,7 +55,7 @@ describe('Navigation Tests', () => {
     cy.dashboardCd().find('[data-cy="selfReportSkillMsg"]').contains('This skill requires approval');
 
     cy.wait(5000);
-    cy.matchSnapshotImageForElement('iframe', 'self reporting modal positioning');
+    cy.matchSnapshotImageForElement('iframe', 'self reporting modal positioning', snapshotOptions);
   });
 
   it('self report rejection modals must render at the same level of the button that initiated the modal', () => {
@@ -83,13 +86,6 @@ describe('Navigation Tests', () => {
     cy.dashboardCd().find('[data-cy="clearRejectionMsgDialog"]').contains('This action will permanently remove the rejection');
 
     cy.wait(5000);
-    const snapshotOptions = {
-      blackout: ['[data-cy="selfReportRejectedAlert"]'],
-      failureThreshold: 0.03, // threshold for entire image
-      failureThresholdType: 'percent', // percent of image or number of pixels
-      customDiffConfig: { threshold: 0.01 }, // threshold for each pixel
-      capture: 'fullPage', // When fullPage, the application under test is captured in its entirety from top to bottom.
-    };
     cy.matchSnapshotImageForElement('iframe', 'self reporting rejection modal positioning', snapshotOptions);
   });
 
@@ -117,7 +113,7 @@ describe('Navigation Tests', () => {
     cy.createSkill(1, 1, 3);
     cy.createSkill(1, 1, 4);
 
-    cy.intercept('GET', '/api/projects/proj1/pointHistory').as('pointHistoryChart');
+    cy.intercept('GET', '/api/projects/proj1/pointHistory*').as('pointHistoryChart');
 
     cy.visit('/');
 

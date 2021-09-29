@@ -25,15 +25,15 @@ describe('App Features Tests', () => {
     });
 
     it('display new version banner when software is updated', () => {
-        cy.intercept({
-            path: '/admin/projects/proj1/subjects',
-            statusCode: 200,
-        }, {
-            body: [],
-            headers: {
-                'skills-client-lib-version': dateFormatter(new Date())
-            },
-        }).as('getSubjects');
+        cy.intercept('/admin/projects/proj1/subjects',
+            {
+                statusCode: 200,
+                body: [],
+                headers: {
+                    'skills-client-lib-version': dateFormatter(new Date()),
+                },
+            }).as('getSubjects');
+
         cy.visit('/administrator/');
        /* cy.injectAxe();
         cy.violationLoggingFunction().then((loggingFunc) => {

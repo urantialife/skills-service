@@ -27,7 +27,7 @@ const yesterday = new Date().getTime() - (1000 * 60 * 60 * 24)
 describe('My Progress Breadcrumb Tests', () => {
 
   beforeEach(() => {
-    cy.intercept('GET', '/api/projects/proj1/pointHistory').as('pointHistoryChart');
+    cy.intercept('GET', '/api/projects/proj1/pointHistory*').as('pointHistoryChart');
     cy.intercept('/api/metrics/allProjectsSkillEventsOverTimeMetricsBuilder**').as('allSkillEventsForUser');
 
     cy.createProject(1);
