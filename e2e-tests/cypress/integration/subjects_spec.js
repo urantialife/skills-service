@@ -288,7 +288,7 @@ describe('Subjects Tests', () => {
         cy.get('.alert-danger').contains('File is not an image format');
     });
 
-    it.only('upload custom icon - server side error', () => {
+    it('upload custom icon - server side error', () => {
         Cypress.on('uncaught:exception', (err, runnable) => {
             if (err.message.includes('Something bad')) {
                 return false
