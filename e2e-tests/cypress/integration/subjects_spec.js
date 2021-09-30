@@ -290,9 +290,7 @@ describe('Subjects Tests', () => {
 
     it('upload custom icon - server side error', () => {
         Cypress.on('uncaught:exception', (err, runnable) => {
-            if (err.message.includes('Something bad')) {
-                return false
-            }
+            return false;
         })
 
         cy.request('POST', '/admin/projects/proj1/subjects/subj1', {

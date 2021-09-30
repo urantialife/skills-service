@@ -51,15 +51,15 @@ describe('App Features Tests', () => {
     });
 
     it('do not display new version banner if lib version in headers is older than lib version in local storage', () => {
-        cy.intercept({
-            path: '/admin/projects/proj1/subjects',
+
+        cy.intercept('/admin/projects/proj1/subjects', {
             statusCode: 200,
-        }, {
             body: [],
             headers: {
                 'skills-client-lib-version': dateFormatter(new Date() - 1000 * 60 * 60 * 24 * 30)
             },
         }).as('getSubjects');
+
         cy.visit('/administrator/');
         cy.get('[data-cy=subPageHeader]').contains('Projects');
         cy.get('[data-cy=projectCard]').last().contains('Manage').click()
