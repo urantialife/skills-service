@@ -59,32 +59,31 @@ describe('Navigation Tests', () => {
   });
 
   it('self report rejection modals must render at the same level of the button that initiated the modal', () => {
+    Cypress.Commands.add("rejectRequest", (requestNum=0, rejectionMsg='Skill was rejected') => {
+      cy.request('/admin/projects/proj1/approvals?limit=10&ascending=true&page=1&orderBy=userId')
+          .then((response) => {
+            cy.request('POST', '/admin/projects/proj1/approvals/reject', {
+              skillApprovalIds: [response.body.data[requestNum].id],
+              rejectionMessage: rejectionMsg,
+            }).then((response) => {
+                cy.log(`[rejection response] => ${JSON.stringify(response.body)}`);
+            });;
+          });
+    });
+    cy.viewport(1280, 1280)
+
     cy.createSkill(1, 1, 1, { selfReportingType: 'Approval' });
     cy.createSkill(1, 1, 2, { selfReportingType: 'Approval' });
     cy.createSkill(1, 1, 3, { selfReportingType: 'Approval' });
     cy.createSkill(1, 1, 4, { selfReportingType: 'Approval' });
 
-    // request
-    cy.viewport(1200, 1000)
-    cy.visit('/progress-and-rankings/projects/proj1/?skillsClientDisplayPath=%2Fsubjects%2Fsubj1');
-    cy.dashboardCd().find('[data-cy="toggleSkillDetails"]').click();
-    cy.dashboardCd().find('[data-cy="selfReportBtn"]').should('have.length', 4)
-    cy.dashboardCd().find('[data-cy="skillProgress_index-3"] [data-cy="selfReportBtn"]').click();
-    cy.dashboardCd().find('[data-cy="selfReportSubmitBtn"]').click();
-    cy.dashboardCd().find('[data-cy="selfReportAlert"]').contains('This skill requires approval');
-
-    cy.visit('/administrator/projects/proj1/self-report');
-    cy.get('[data-cy="selectPageOfApprovalsBtn"]').click();
-    cy.get('[data-cy="rejectBtn"]').click();
-    cy.get('[data-cy="rejectionTitle"]').contains('This will permanently reject user\'s request(s) to get points')
-    cy.get('[data-cy="confirmRejectionBtn"]').click();
-    cy.get('[data-cy="skillsReportApprovalTable"]').contains('Nothing to approve');
+    cy.reportSkill(1, 4, Cypress.env('oauthMode') ?  Cypress.env('proxyUser') : 'skills@skills.org', '2021-08-24 10:00', false, true);
+    cy.rejectRequest();
 
     cy.visit('/progress-and-rankings/projects/proj1/?skillsClientDisplayPath=%2Fsubjects%2Fsubj1');
     cy.dashboardCd().find('[data-cy="toggleSkillDetails"]').click();
     cy.dashboardCd().find('[data-cy="clearRejectionMsgBtn"]').click();
     cy.dashboardCd().find('[data-cy="clearRejectionMsgDialog"]').contains('This action will permanently remove the rejection');
-
     cy.wait(5000);
     cy.matchSnapshotImageForElement('iframe', 'self reporting rejection modal positioning', snapshotOptions);
   });
