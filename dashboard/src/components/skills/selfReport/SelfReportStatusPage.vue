@@ -85,7 +85,7 @@ limitations under the License.
           });
       },
       hasSkillsWithApprovals() {
-        const approvalCount = this.selfReportStats.find((item) => item.value === 'Approval');
+        const approvalCount = this.selfReportStats?.find((item) => item.value === 'Approval');
         return approvalCount !== undefined && approvalCount.count > 0;
       },
     },

@@ -41,7 +41,7 @@ limitations under the License.
     },
     mounted() {
       this.cards = this.cards.map((c) => {
-        const found = this.selfReportStats.find((s) => c.id === s.value);
+        const found = this.selfReportStats?.find((s) => c.id === s.value);
         if (found) {
           // eslint-disable-next-line
           c.count = found.count;
