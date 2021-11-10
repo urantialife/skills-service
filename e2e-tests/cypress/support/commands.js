@@ -212,7 +212,7 @@ Cypress.Commands.add("assignCrossProjectDep", (proj1Num, skillNum1, proj2Num, sk
 });
 
 
-Cypress.Commands.add("doReportSkill", ({project = 1, skill = 1, subjNum = 1, userId = 'user@skills.org', date = '2020-09-12 11:00', failOnError=true, approvalRequestedMsg=null} = {}) => {
+Cypress.Commands.add("doReportSkill", ({project = 1, skill = 1, subjNum = 1, userId = 'user@skills.org', date = '2020-09-12 11:00', failOnError=true, approvalRequestedMsg=null, logResponse=false} = {}) => {
     let m = moment.utc(date, 'YYYY-MM-DD HH:mm');
     if (date === 'now') {
         m = moment.utc()
@@ -236,16 +236,22 @@ Cypress.Commands.add("doReportSkill", ({project = 1, skill = 1, subjNum = 1, use
         skillId = skill;
     }
     const body = {userId, timestamp: m.clone().format('x'), approvalRequestedMsg}
+    const url = `/api/projects/${proj}/skills/${skillId}`;
     cy.request({
         method: 'POST',
-        url: `/api/projects/${proj}/skills/${skillId}`,
+        url,
         failOnStatusCode: failOnError,
-        body });
+        body })
+        .then((response) => {
+            if(logResponse){
+                cy.log(`[${url}] => ${JSON.stringify(response.body)}`);
+            }
+        });
 });
 
 // deprecated, pease use doReportSkill
-Cypress.Commands.add("reportSkill", (project = 1, skill = 1, userId = 'user@skills.org', date = '2020-09-12 11:00', failOnError=true, approvalRequestedMsg=null) => {
-    cy.doReportSkill({ project, skill, userId, date, failOnError, approvalRequestedMsg } );
+Cypress.Commands.add("reportSkill", (project = 1, skill = 1, userId = 'user@skills.org', date = '2020-09-12 11:00', failOnError=true, approvalRequestedMsg=null, logResponse=false) => {
+    cy.doReportSkill({ project, skill, userId, date, failOnError, approvalRequestedMsg, logResponse } );
 });
 
 
