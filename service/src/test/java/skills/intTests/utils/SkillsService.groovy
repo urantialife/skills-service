@@ -1223,7 +1223,7 @@ class SkillsService {
     }
 
     def importSkillFromCatalog(String importIntoProjectId, String importIntoSubjectId, String catalogSkillProjectId, String catalogSkillSkillId) {
-        return wsHelper.adminPost("/projects/${importIntoProjectId}/subjects/${importIntoSubjectId}/import/${catalogSkillProjectId}/${catalogSkillSkillId}")
+        return wsHelper.adminPost("/projects/${importIntoProjectId}/subjects/${importIntoSubjectId}/import/${catalogSkillProjectId}/${catalogSkillSkillId}", [:])
     }
 
     def bulkExportSkillsToCatalog(String projectId, List<String> skillIds) {
