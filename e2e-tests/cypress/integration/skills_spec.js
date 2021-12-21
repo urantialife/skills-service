@@ -63,7 +63,7 @@ describe('Skills Tests', () => {
       cy.visit('/administrator/projects/proj1/subjects/subj1');
       cy.wait('@loadSubject');
 
-      cy.clickButton('Skill');
+      cy.get('[data-cy="newSkillButton"]').click();
       cy.get('[data-cy=closeSkillButton]').click();
       cy.get('[data-cy=closeSkillButton]').should('not.exist');
     });
@@ -89,7 +89,7 @@ describe('Skills Tests', () => {
       cy.visit('/administrator/projects/proj1/subjects/subj1');
       cy.wait('@loadSubject');
 
-      cy.clickButton('Skill');
+      cy.get('[data-cy="newSkillButton"]').click();
       cy.get('[data-cy=skillName]').type('Skill123');
       cy.get('[data-cy=skillDescription]').type('loremipsum');
       cy.get('[data-cy=saveSkillButton]').should('be.enabled');
@@ -225,7 +225,7 @@ describe('Skills Tests', () => {
 
         cy.wait('@loadSubject');
 
-        cy.clickButton('Skill')
+        cy.get('[data-cy="newSkillButton"]').click();
         cy.get(selectorOccurrencesToCompletion).should('have.value', '5')
         cy.get('#skillName').type('Skill 1')
 
@@ -264,7 +264,7 @@ describe('Skills Tests', () => {
 
         cy.visit('/administrator/projects/proj1/subjects/subj1');
         cy.wait('@loadSubject');
-        cy.clickButton('Skill');
+        cy.get('[data-cy="newSkillButton"]').click();
 
         cy.get('#skillName').type(providedName);
 
@@ -291,7 +291,7 @@ describe('Skills Tests', () => {
 
       cy.visit('/administrator/projects/proj1/subjects/subj1');
       cy.wait('@loadSubject');
-      cy.clickButton('Skill');
+      cy.get('[data-cy="newSkillButton"]').click();
 
       cy.get('#skillName').type(providedName);
 
@@ -495,7 +495,7 @@ describe('Skills Tests', () => {
 
       cy.visit('/administrator/projects/proj1/subjects/subj1');
       cy.wait('@loadSubject');
-      cy.clickButton('Skill');
+      cy.get('[data-cy="newSkillButton"]').click();
 
       cy.get('#skillName').type(providedName);
 
@@ -661,7 +661,7 @@ describe('Skills Tests', () => {
 
         cy.visit('/administrator/projects/proj1/subjects/subj1');
         cy.wait('@loadSubject');
-        cy.clickButton('Skill')
+        cy.get('[data-cy="newSkillButton"]').click();
 
         cy.get('[data-cy="skillName"]').type('Great Name');
         cy.get('[data-cy="saveSkillButton"]').should('be.enabled');
@@ -681,7 +681,7 @@ describe('Skills Tests', () => {
 
         cy.visit('/administrator/projects/proj1/subjects/subj1');
         cy.wait('@loadSubject');
-        cy.clickButton('Skill')
+        cy.get('[data-cy="newSkillButton"]').click();
 
         cy.get('[data-cy="skillName"]').type('Great Name 1 2 33');
         cy.get('[data-cy="idInputEnableControl"]').contains('Enable').click();
